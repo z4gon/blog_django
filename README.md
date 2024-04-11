@@ -5,6 +5,7 @@ A Blog built with Django 4
   - [Resources](#resources)
   - [Local Setup](#local-setup)
     - [Create Django Project](#create-django-project)
+    - [Create Django App](#create-django-app)
 
 ## Resources
 [Python Django 4 Masterclass | Build a Real World Project](https://www.udemy.com/course/python-django-masterclass)
@@ -18,5 +19,10 @@ A Blog built with Django 4
 pipenv install django==4.2.11
 pipenv shell
 django-admin startproject blog_project .
-python manage.py runserver
+python ./manage.py runserver
+```
+
+### Create Django App
+```sh
+python ./manage.py startapp app
 ```
