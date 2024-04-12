@@ -29,26 +29,26 @@
 					<div class="grid-2 blog">
 						{% for post in posts %}
 						<!-- card -->
-						<div class="card">
-							<div class="post-img">
-								<img src="{{ post.image.url }}" alt="" />
-								<div class="tag">Tag name</div>
-							</div>
-							<div class="card-content">
-								<a href={% url "post_details" post.slug %}>
-									<h3>{{ post.title }}</h3>
-								</a>
-								<div class="author">
-									<div class="profile-pic">
-										<img src="../images/author.svg" alt="" />
-									</div>
-									<div class="details">
-										<p>Author name</p>
-										<small>June 20, 2022</small>
+						<a href={% url "post_details" post.slug %}>
+							<div class="card">
+								<div class="post-img">
+									<img src="{{ post.image.url }}" alt="" />
+									<div class="tag">Tag name</div>
+								</div>
+								<div class="card-content">
+										<h3>{{ post.title }}</h3>
+									<div class="author">
+										<div class="profile-pic">
+											<img src="../images/author.svg" alt="" />
+										</div>
+										<div class="details">
+											<p>Author name</p>
+											<small>June 20, 2022</small>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						</a>
 						<!-- card end-->
 						{% endfor %}
 					</div>
