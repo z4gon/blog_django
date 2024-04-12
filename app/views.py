@@ -11,6 +11,8 @@ def posts_list(request):
 def post_details(request, post_slug):
     try:
         post = Post.objects.get(slug=post_slug)
+        post.views_count += 1
+        post.save()
     except Post.DoesNotExist:
         return render(request, 'app/404.html', status=404)
 

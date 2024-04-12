@@ -6,7 +6,7 @@ from app.models import Post, Tag
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'created_at')
     search_fields = ('title', 'content')
-    exclude = ('slug',)
+    exclude = ('slug', 'views_count')
 
 admin.site.register(Post, PostAdmin)
 

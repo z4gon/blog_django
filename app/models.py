@@ -47,6 +47,9 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True) 
     slug = models.SlugField(max_length=200, unique=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
+    views_count = models.IntegerField(default=0)
+
+    # relationships
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
 
     def __str__(self):
