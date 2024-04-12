@@ -1,12 +1,61 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 
-{% block title %}Home{% endblock %}
+{% block title %}Home{% endblock %} 
 
 {% block content %}
-	<h1>Blog</h1>
-	{% for post in posts %}
-	<article>
-		<a href={% url "post_details" post.slug %} ><h2>{{ post.title }}</h2></a>
-	</article>
-	{% endfor %}
+<div class="container">
+	<div class="layout">
+		<!-- left layout -->
+		<div class="left">
+			<div class="page-top">
+				<div class="top flex">
+					<div class="page-name">
+						<a href="/" class="learn">
+							<span class="material-icons"> keyboard_return </span> Go back
+						</a>
+						<h1>Blog</h1>
+					</div>
+					<div class="search-bar s-active">
+						<input type="text" placeholder="Search" />
+						<div class="animated-search">
+							<i class="uil uil-search"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<section class="sp">
+				<div class="container">
+					<div class="grid-2 blog">
+						{% for post in posts %}
+						<!-- card -->
+						<div class="card">
+							<div class="post-img">
+								<img src="{{ post.image.url }}" alt="" />
+								<div class="tag">Tag name</div>
+							</div>
+							<div class="card-content">
+								<a href={% url "post_details" post.slug %}>
+									<h3>{{ post.title }}</h3>
+								</a>
+								<div class="author">
+									<div class="profile-pic">
+										<img src="../images/author.svg" alt="" />
+									</div>
+									<div class="details">
+										<p>Author name</p>
+										<small>June 20, 2022</small>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- card end-->
+						{% endfor %}
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+
 {% endblock %}
