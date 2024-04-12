@@ -3,6 +3,23 @@ from django.utils.text import slugify
 
 # Create your models here.
 
+class Tag(models.Model):
+    """
+    A model to represent a tag.
+    """
+    name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.id: # only on creation
+            self.slug = slugify(self.name)
+
+        return super().save(*args, **kwargs)
+    
 class Post(models.Model):
     """
     A model to represent a blog post.
@@ -30,6 +47,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True) 
     slug = models.SlugField(max_length=200, unique=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
 
     def __str__(self):
         return self.title
