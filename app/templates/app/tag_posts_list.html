@@ -1,6 +1,6 @@
 {% extends 'base.html' %} 
 
-{% block title %}Home{% endblock %} 
+{% block title %}{{ tag.name }}{% endblock %} 
 
 {% block content %}
 <div class="container">
@@ -13,7 +13,7 @@
 						<a href="/" class="learn">
 							<span class="material-icons"> keyboard_return </span> Go back
 						</a>
-						<h1>Blog</h1>
+						<h1>{{ tag.name }}</h1>
 					</div>
 					<div class="search-bar s-active">
 						<input type="text" placeholder="Search" />

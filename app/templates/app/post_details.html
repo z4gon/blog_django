@@ -55,9 +55,11 @@
 								{{ post.body }}
 							</p>
 							<div class="blog-tags">
-								<div class="tag">Tag name 1</div>
-								<div class="tag">Tag name 2</div>
-								<div class="tag">Tag name 3</div>
+								{% for tag in post.tags.all %}
+									<a href={% url "tag_posts_list" tag.slug %}>
+										<div class="tag">{{tag.name}}</div>
+									</a>
+								{% endfor %}
 							</div>
 							<div class="social-share">
 								<div class="reactions">
