@@ -16,7 +16,7 @@ A Blog built with Django 4
 
 ### Create Django Project
 ```sh
-pipenv install django==4.2.11
+pipenv install django==4.2.11 pillow==10.3.0
 pipenv shell
 django-admin startproject blog_project .
 python ./manage.py runserver
