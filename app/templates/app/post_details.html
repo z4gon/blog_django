@@ -1,5 +1,7 @@
 {% extends 'base.html' %} 
 
+{% load static %}
+
 {% block title %}{{ post.title }}{% endblock %} 
 
 {% block content %}
@@ -88,7 +90,28 @@
 									</div>
 								</div> {% endcomment %}
 							</div>
+							<!-- comments -->
+							{% include "app/post_comment.html" %}    
 						</div>
+					</div>
+					<!-- blog post end -->
+					<div class="comment-box">
+						<h3>Leave a new comment to this post</h3>
+						<p>
+						Your email address will not be published. Required fields
+						are marked<span>*</span>
+						</p>
+						<form action="">
+						<textarea placeholder="Type your comment...."></textarea>
+						<div class="grid-3">
+							<input type="text" placeholder="Name" />
+							<input type="temail" placeholder="Email" />
+							<input type="url" placeholder="Website (optional)" />
+						</div>
+						<button class="btn btn-primary rounded">
+							Post comment
+						</button>
+						</form>
 					</div>
 				</div>
 			</section>

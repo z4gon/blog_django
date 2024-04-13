@@ -1,5 +1,7 @@
 {% extends 'base.html' %} 
 
+{% load static %} 
+
 {% block title %}Home{% endblock %} 
 
 {% block content %}
@@ -41,7 +43,7 @@
 										<h3>{{ post.title }}</h3>
 									<div class="author">
 										<div class="profile-pic">
-											<img src="../images/author.svg" alt="" />
+											<img src={% static 'app/images/author.svg' %} alt="" />
 										</div>
 										<div class="details">
 											<p>Author name</p>
