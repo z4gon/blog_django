@@ -13,14 +13,14 @@
 						<a href="/" class="learn">
 							<span class="material-icons"> keyboard_return </span> Go back
 						</a>
-						<h1>Blog</h1>
+						<h1>{{ post.title }}</h1>
 					</div>
 				</div>
 			</div>
 
 			<center>
 				<div class="typo">
-					<h1 class="title blog-title">{{ post.title }}</h1>
+					{% comment %} <h1 class="title blog-title">{{ post.title }}</h1> {% endcomment %}
 					<div class="timeline">
 						<div class="track">
 							<i class="uil uil-clock"></i>
@@ -71,7 +71,7 @@
 										<span>10</span>
 									</div>
 								</div>
-								<div class="share">
+								{% comment %} <div class="share">
 									<div class="social">
 										<a href="#">
 											<i class="fa-brands fa-facebook-f"></i>
@@ -86,7 +86,7 @@
 											<i class="fa-brands fa-twitter"></i>
 										</a>
 									</div>
-								</div>
+								</div> {% endcomment %}
 							</div>
 						</div>
 					</div>
