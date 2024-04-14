@@ -83,7 +83,10 @@
 		</header>
 		<!-- End Header -->
 
-		<main id="main">{% block content %} {% endblock %}</main>
+		<main id="main">
+			{% block content %} {% endblock %}
+			{% include "app/subscription_form.html" %}   
+		</main>
 
 		<!-- ======= Footer ======= -->
 		<footer id="footer" class="footer">
