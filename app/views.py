@@ -7,6 +7,8 @@ from app.forms import CommentForm
 
 # Create your views here.
 
+MAX_POSTS = 50
+
 def posts(request):
     if request.GET.get('tag'):
         tag_slug = request.GET.get('tag')
@@ -15,11 +17,12 @@ def posts(request):
         except Tag.DoesNotExist:
             return render(request, 'app/404.html', status=404)
         
-        posts = tag.posts.all()[0:10]
+        posts = tag.posts.all()[0:MAX_POSTS]
         return render(request, 'app/tag_posts_list.html', {'tag': tag, 'posts': posts})
     else:
-        posts = Post.objects.all()[0:10]
-        return render(request, 'app/posts_list.html', {'posts': posts})
+        popular_posts = Post.objects.all().order_by('-views_count')[0:MAX_POSTS]
+        latest_posts = Post.objects.all()[0:MAX_POSTS]
+        return render(request, 'app/posts_list.html', {'popular_posts': popular_posts, 'latest_posts': latest_posts})
 
 def post(request, post_slug):
     try:
