@@ -6,116 +6,283 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="style.css" />
+
+		<title>{% block title %}Home{% endblock %} | AwesomeBlog</title>
+		<meta content="" name="description" />
+		<meta content="" name="keywords" />
+
+		<!-- Favicons -->
+		<link href="{% static 'app/img/favicon.png' %}" rel="icon" />
+
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
 			rel="stylesheet"
-			href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css"
+		/>
+
+		<!-- Vendor CSS Files -->
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+			rel="stylesheet"
 		/>
 		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-			integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-			crossorigin="anonymous"
-			referrerpolicy="no-referrer"
-		/>
-		<link
-			href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
 			rel="stylesheet"
 		/>
-		<link rel="stylesheet" href="{% static 'app/main.css' %}" />
+
+		<!-- Template Main CSS Files -->
+		<link rel="stylesheet" href="{% static 'app/css/variables.css' %}" />
+		<link rel="stylesheet" href="{% static 'app/css/main.css' %}" />
+		<link rel="stylesheet" href="{% static 'app/css/overrides.css' %}" />
+
+		<!-- =======================================================
+		* Template Name: ZenBlog
+		* Template URL: https://bootstrapmade.com/zenblog-bootstrap-blog-template/
+		* Updated: Mar 17 2024 with Bootstrap v5.3.3
+		* Author: BootstrapMade.com
+		* License: https:///bootstrapmade.com/license/
+		======================================================== -->
+
 		{% block head %} {% endblock %}
-		<title>{% block title %}Home{% endblock %} | Blog</title>
 	</head>
 	<body>
-		<header>
-			<div class="container container-fluid">
-				<a href="/">
-					<div class="logo">
-						<i class="fa-brands fa-blogger"></i>
-					</div>
+		<!-- ======= Header ======= -->
+		<header id="header" class="header d-flex align-items-center fixed-top">
+			<div
+				class="container-fluid container-xl d-flex align-items-center justify-content-between"
+			>
+				<a href="/" class="logo d-flex align-items-center">
+					<!-- Uncomment the line below if you also wish to use an image logo -->
+					<!-- <img src="assets/img/logo.png" alt=""> -->
+					<h2>AwesomeBlog</h2>
 				</a>
-				{% comment %}
-				<div class="links">
-					<a href="index.html">Home</a>
-					<a href="pages/blog.html">Blog</a>
-					<a href="pages/author.html">Author</a>
-				</div>
-				{% endcomment %}
-				<div class="action-btn">
-					<a href="pages/login.html"
-						><button class="btn btn-scoundary">Login</button></a
-					>
-					<a href="pages/signup.html">
-						<button class="btn btn-primary">Sign Up</button></a
-					>
-					<i class="uil uil-align-center-alt menu" onclick="menu()"></i>
+
+				<nav id="navbar" class="navbar">
+					<ul>
+						<li><a href="/about">About</a></li>
+						<li><a href="/contact">Contact</a></li>
+					</ul>
+				</nav>
+				<!-- .navbar -->
+
+				<div class="position-relative d-flex align-items-center">
+					<!-- ======= Search Form ======= -->
+					<span class="icon me-2 bi-search"></span>
+					<form action="search-result.html" class="search-form">
+						<input type="text" placeholder="Search" class="form-control" />
+					</form>
+					<!-- End Search Form -->
 				</div>
 			</div>
 		</header>
-		<main class="sp">{% block content %} {% endblock %}</main>
-		<footer>
-			<div class="container">
-				<div class="grid-4">
-					<div class="logo f-logo">
-						<i class="fa-brands fa-blogger"></i>
-					</div>
-					<div class="link">
-						{% comment %}
-						<h2>Quick link</h2>
-						<div class="q-link">
-							<a href="#">Home</a>
-							<a href="#">Blog</a>
-							<a href="#">Unsubscribe</a>
+		<!-- End Header -->
+
+		<main id="main">{% block content %} {% endblock %}</main>
+
+		<!-- ======= Footer ======= -->
+		<footer id="footer" class="footer">
+			<div class="footer-content">
+				<div class="container">
+					<div class="row g-5">
+						<div class="col-lg-4">
+							<h3 class="footer-heading">AwesomeBlog</h3>
+							<p>
+								Dive into a world of inspiration at AwesomeBlog! From
+								cutting-edge tech to thrilling gaming insights, explore
+								captivating content designed to spark curiosity and creativity.
+								Join our vibrant community and embark on an adventure of
+								discovery today!
+							</p>
 						</div>
-						{% endcomment %}
-					</div>
-					<div class="link">
-						{% comment %}
-						<h2>Top cetagory</h2>
-						<div class="q-link">
-							<a href="#">Home</a>
-							<a href="#">Blog</a>
-							<a href="#">Unsubscribe</a>
+
+						<div class="col-6 col-lg-2">
+							<h3 class="footer-heading">Navigation</h3>
+							<ul class="footer-links list-unstyled">
+								<li>
+									<a href="/about"><i class="bi bi-chevron-right"></i> About</a>
+								</li>
+								<li>
+									<a href="/contact"
+										><i class="bi bi-chevron-right"></i> Contact</a
+									>
+								</li>
+							</ul>
 						</div>
-						{% endcomment %}
-					</div>
-					<div class="news-signup">
-						<h2>Subscribe</h2>
-						<div class="newsletter">
-							<form method="POST">
-								<input
-									type="email"
-									name="email"
-									maxlength="100"
-									placeholder="Enter your email"
-									required=""
-									id="id_email"
-								/>
-								<button class="btn btn-primary">Subscribe</button>
-							</form>
+						<div class="col-6 col-lg-2">
+							<h3 class="footer-heading">Categories</h3>
+							{% comment %}
+							<ul class="footer-links list-unstyled">
+								<li>
+									<a href="category.html"
+										><i class="bi bi-chevron-right"></i> Business</a
+									>
+								</li>
+								<li>
+									<a href="category.html"
+										><i class="bi bi-chevron-right"></i> Culture</a
+									>
+								</li>
+								<li>
+									<a href="category.html"
+										><i class="bi bi-chevron-right"></i> Sport</a
+									>
+								</li>
+								<li>
+									<a href="category.html"
+										><i class="bi bi-chevron-right"></i> Food</a
+									>
+								</li>
+								<li>
+									<a href="category.html"
+										><i class="bi bi-chevron-right"></i> Politics</a
+									>
+								</li>
+								<li>
+									<a href="category.html"
+										><i class="bi bi-chevron-right"></i> Celebrity</a
+									>
+								</li>
+								<li>
+									<a href="category.html"
+										><i class="bi bi-chevron-right"></i> Startups</a
+									>
+								</li>
+								<li>
+									<a href="category.html"
+										><i class="bi bi-chevron-right"></i> Travel</a
+									>
+								</li>
+							</ul>
+							{% endcomment %}
+						</div>
+
+						<div class="col-lg-4">
+							<h3 class="footer-heading">Recent Posts</h3>
+							{% comment %}
+							<ul class="footer-links footer-blog-entry list-unstyled">
+								<li>
+									<a href="single-post.html" class="d-flex align-items-center">
+										<img
+											src="assets/img/post-sq-1.jpg"
+											alt=""
+											class="img-fluid me-3"
+										/>
+										<div>
+											<div class="post-meta d-block">
+												<span class="date">Culture</span>
+												<span class="mx-1">&bullet;</span>
+												<span>Jul 5th '22</span>
+											</div>
+											<span>5 Great Startup Tips for Female Founders</span>
+										</div>
+									</a>
+								</li>
+
+								<li>
+									<a href="single-post.html" class="d-flex align-items-center">
+										<img
+											src="assets/img/post-sq-2.jpg"
+											alt=""
+											class="img-fluid me-3"
+										/>
+										<div>
+											<div class="post-meta d-block">
+												<span class="date">Culture</span>
+												<span class="mx-1">&bullet;</span>
+												<span>Jul 5th '22</span>
+											</div>
+											<span
+												>What is the son of Football Coach John Gruden, Deuce
+												Gruden doing Now?</span
+											>
+										</div>
+									</a>
+								</li>
+
+								<li>
+									<a href="single-post.html" class="d-flex align-items-center">
+										<img
+											src="assets/img/post-sq-3.jpg"
+											alt=""
+											class="img-fluid me-3"
+										/>
+										<div>
+											<div class="post-meta d-block">
+												<span class="date">Culture</span>
+												<span class="mx-1">&bullet;</span>
+												<span>Jul 5th '22</span>
+											</div>
+											<span
+												>Life Insurance And Pregnancy: A Working Mom’s
+												Guide</span
+											>
+										</div>
+									</a>
+								</li>
+
+								<li>
+									<a href="single-post.html" class="d-flex align-items-center">
+										<img
+											src="assets/img/post-sq-4.jpg"
+											alt=""
+											class="img-fluid me-3"
+										/>
+										<div>
+											<div class="post-meta d-block">
+												<span class="date">Culture</span>
+												<span class="mx-1">&bullet;</span>
+												<span>Jul 5th '22</span>
+											</div>
+											<span
+												>How to Avoid Distraction and Stay Focused During Video
+												Calls?</span
+											>
+										</div>
+									</a>
+								</li>
+							</ul>
+							{% endcomment %}
 						</div>
 					</div>
 				</div>
-				{% comment %}
-				<div class="share">
-					<div class="social">
-						<a href="#">
-							<i class="fa-brands fa-facebook-f"></i>
-						</a>
-						<a href="#">
-							<i class="fa-brands fa-instagram"></i>
-						</a>
-						<a href="#">
-							<i class="fa-brands fa-linkedin-in"></i>
-						</a>
-						<a href="#">
-							<i class="fa-brands fa-twitter"></i>
-						</a>
+			</div>
+
+			<div class="footer-legal">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+							<div class="copyright">
+								© Copyright <strong><span>ZenBlog</span></strong
+								>. All Rights Reserved
+							</div>
+
+							<div class="credits">
+								<!-- All the links in the footer should remain intact. -->
+								<!-- You can delete the links only if you purchased the pro version. -->
+								<!-- Licensing information: https://bootstrapmade.com/license/ -->
+								<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/ -->
+								Designed by
+								<a href="https://bootstrapmade.com/">BootstrapMade</a>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="social-links mb-3 mb-lg-0 text-center text-md-end">
+								<a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+								<a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+								<a href="#" class="instagram"
+									><i class="bi bi-instagram"></i
+								></a>
+								<a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
+								<a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+							</div>
+						</div>
 					</div>
 				</div>
-				{% endcomment %}
 			</div>
 		</footer>
-		<script src="{% static 'app/main.js' %}" id="main"></script>
+		<script src="{% static 'app/js/main.js' %}" id="main"></script>
 	</body>
 </html>

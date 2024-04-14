@@ -9,6 +9,7 @@ A Blog built with Django 4
 
 ## Resources
 [Python Django 4 Masterclass | Build a Real World Project](https://www.udemy.com/course/python-django-masterclass)
+[ZenBlog - Bootstrap Blog Template](https://bootstrapmade.com/zenblog-bootstrap-blog-template/)
 
 ## Local Setup
 - [pyenv](https://github.com/pyenv/pyenv)

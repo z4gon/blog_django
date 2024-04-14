@@ -1,0 +1,21 @@
+.post-entry-1 {
+  margin-bottom: 30px;
+  display: inline-block;
+  padding: 1em;
+  vertical-align: top;
+}
+
+.post-entry-1 img {
+  margin-bottom: 30px;  
+  min-height: 14em;
+  object-fit: cover;
+}
+
+.single-post-content .img-fluid {
+  width: 100%;
+  margin-bottom: 3em;
+}
+
+.btn-reply {
+  margin-top: 1em;
+}

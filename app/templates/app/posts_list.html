@@ -5,61 +5,90 @@
 {% block title %}Home{% endblock %} 
 
 {% block content %}
-<div class="container">
-	<div class="layout">
-		<!-- left layout -->
-		<div class="left">
-			<div class="page-top">
-				<div class="top flex">
-					<div class="page-name">
-						{% comment %} <a href="/" class="learn">
-							<span class="material-icons"> keyboard_return </span> Go back
-						</a> {% endcomment %}
-						<h1>Blog</h1>
+{% comment %} 
+<!-- ======= Hero Slider Section ======= -->
+<section id="hero-slider" class="hero-slider">
+	<div class="container-md" data-aos="fade-in">
+		<div class="row">
+		<div class="col-12">
+			<div class="swiper sliderFeaturedPosts">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+				<a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('assets/img/post-slide-1.jpg');">
+					<div class="img-bg-inner">
+					<h2>The Best Homemade Masks for Face (keep the Pimples Away)</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem atque.</p>
 					</div>
-					<div class="search-bar s-active">
-						<input type="text" placeholder="Search" />
-						<div class="animated-search">
-							<i class="uil uil-search"></i>
-						</div>
+				</a>
+				</div>
+
+				<div class="swiper-slide">
+				<a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('assets/img/post-slide-2.jpg');">
+					<div class="img-bg-inner">
+					<h2>17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem atque.</p>
 					</div>
+				</a>
+				</div>
+
+				<div class="swiper-slide">
+				<a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('assets/img/post-slide-3.jpg');">
+					<div class="img-bg-inner">
+					<h2>13 Amazing Poems from Shel Silverstein with Valuable Life Lessons</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem atque.</p>
+					</div>
+				</a>
+				</div>
+
+				<div class="swiper-slide">
+				<a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('assets/img/post-slide-4.jpg');">
+					<div class="img-bg-inner">
+					<h2>9 Half-up/half-down Hairstyles for Long and Medium Hair</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem atque.</p>
+					</div>
+				</a>
 				</div>
 			</div>
+			<div class="custom-swiper-button-next">
+				<span class="bi-chevron-right"></span>
+			</div>
+			<div class="custom-swiper-button-prev">
+				<span class="bi-chevron-left"></span>
+			</div>
 
-			<section class="sp">
-				<div class="container">
-					<div class="grid-2 blog">
-						{% for post in posts %}
-						<!-- card -->
-						<a href={% url "post_details" post.slug %}>
-							<div class="card">
-								<div class="post-img">
-									<img src="{{ post.image.url }}" alt="" />
-									{% if post.tags.all.0 %}
-										<div class="tag">{{post.tags.all.0.name}}</div>
-									{% endif %}
-								</div>
-								<div class="card-content">
-										<h3>{{ post.title }}</h3>
-									<div class="author">
-										<div class="profile-pic">
-											<img src={% static 'app/images/author.svg' %} alt="" />
-										</div>
-										<div class="details">
-											<p>Author name</p>
-											<small>June 20, 2022</small>
-										</div>
-									</div>
-								</div>
-							</div>
-						</a>
-						<!-- card end-->
-						{% endfor %}
-					</div>
-				</div>
-			</section>
+			<div class="swiper-pagination"></div>
+			</div>
+		</div>
 		</div>
 	</div>
-</div>
+	</section><!-- End Hero Slider Section -->
+{% endcomment %}
 
+<!-- ======= Post Grid Section ======= -->
+<section id="posts" class="posts">
+	<div class="container">
+		<div class="col-lg-12">
+			{% for post in posts %}
+			<!-- card -->
+				<div class="post-entry-1 col-lg-3">
+					<a href={% url "post_details" post.slug %}>
+						<img src="{{ post.image.url }}" alt="" class="img-fluid">
+					</a>
+					<div class="post-meta">
+						{% if post.tags.all.0 %}
+							<span class="date">{{post.tags.all.0.name}}</span>
+						{% endif %}
+						<span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+					</div>
+					<h2>
+						<a href={% url "post_details" post.slug %}>
+							{{ post.title }}
+						</a>
+					</h2>
+				</div>
+			<!-- card end-->
+			{% endfor %}
+		</div> <!-- End .row -->
+	</div>
+</section> <!-- End Post Grid Section -->
 {% endblock %}
