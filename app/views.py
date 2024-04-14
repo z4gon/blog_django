@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from app.models import Post, Tag
+from app.models import Comment, Post, Tag
 from app.forms import CommentForm
 
 # Create your views here.
@@ -27,7 +27,7 @@ def post(request, post_slug):
         post.views_count += 1
         post.save()
 
-        comments = post.comments.all()
+        comments = post.comments.filter(parent=None)
         comment_form = CommentForm()
 
     except Post.DoesNotExist:
@@ -35,7 +35,7 @@ def post(request, post_slug):
     except Exception:
         return render(request, 'app/500.html', status=500)
 
-    return render(request, 'app/post_details.html', {'post': post, 'comments': comments, 'comment_form': comment_form})
+    return render(request, 'app/post_details.html', {'post': post, 'root_comments': comments, 'comment_form': comment_form})
 
 def comment(request):
     try:
@@ -43,13 +43,21 @@ def comment(request):
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
+
                 post_id = request.POST.get('post_id')
                 post = Post.objects.get(id=post_id)
                 comment.post = post
+
+                if request.POST.get('parent_id'):
+                    parent_id = request.POST.get('parent_id')
+                    parent = Comment.objects.get(id=parent_id)
+                    comment.parent = parent
+
                 comment.save()
+
                 return HttpResponseRedirect(reverse('post_details', args=[post.slug]))
 
-    except Post.DoesNotExist:
+    except (Post.DoesNotExist, Comment.DoesNotExist):
         return render(request, 'app/404.html', status=404)
     except Exception:
         return render(request, 'app/500.html', status=500)

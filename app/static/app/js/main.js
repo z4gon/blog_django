@@ -1,5 +1,5 @@
 function showCommentBox(replyButton) {
-  const parent = replyButton.parentNode
+  const parent = replyButton.parentNode.parentNode
   const commentBox = parent.querySelector('.comment-box')
   if (commentBox.style.display === "none") {
     commentBox.style.display = "block";

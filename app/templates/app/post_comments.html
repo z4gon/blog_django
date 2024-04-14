@@ -2,33 +2,14 @@
 
 <!-- ======= Comments ======= -->
 <div class="comments">
-	{% if comments %}
-		<h5 class="comment-title py-4">{{ comments.count }} Comment{{ comments.count | pluralize:'s' }}</h5>
-	{% endif %}
-
-	{% for comment in comments %}
-
-		<div class="comment d-flex mb-4">
-			<div class="flex-shrink-0">
-				<div class="avatar avatar-sm rounded-circle">
-					<img class="avatar-img" src={% static 'app/img/avatar.png' %} alt=""
-					class="img-fluid" />
-				</div>
-			</div>
-			<div class="flex-grow-1 ms-2 ms-sm-3">
-				<div class="comment-meta d-flex align-items-baseline">
-					<h6 class="me-2">{{ comment.name }}</h6>
-					<span class="text-muted">2d</span>
-				</div>
-				<div class="comment-body">
-					{{ comment.body }}
-				</div>
-			</div>
-		</div>
-
-	{% endfor %} 
+	{% if root_comments %}
+	<h5 class="comment-title py-4">
+		{{ root_comments.count }} Comment{{ root_comments.count | pluralize:'s' }}
+	</h5>
+	{% endif %} 
 	
-	{% comment %}
+	{% for comment in root_comments %}
+
 	<div class="comment d-flex mb-4">
 		<div class="flex-shrink-0">
 			<div class="avatar avatar-sm rounded-circle">
@@ -38,109 +19,118 @@
 		</div>
 		<div class="flex-grow-1 ms-2 ms-sm-3">
 			<div class="comment-meta d-flex align-items-baseline">
-				<h6 class="me-2">Jordan Singer</h6>
+				<h6 class="me-2">{{ comment.name }}</h6>
 				<span class="text-muted">2d</span>
 			</div>
 			<div class="comment-body">
-				Lorem ipsum, dolor sit amet consectetur adipisicing elit. Non minima
-				ipsum at amet doloremque qui magni, placeat deserunt pariatur itaque
-				laudantium impedit aliquam eligendi repellendus excepturi quibusdam
-				nobis esse accusantium.
+				{{ comment.body }}
+				<span class="btn-reply" onclick="showCommentBox(this)">Reply</span>
 			</div>
-
-			<input
-				type="button"
-				class="btn btn-secondary btn-reply"
-				value="Reply"
-				onclick="showCommentBox(this)"
-			/>
-
+			<!-- ======= Comments Form ======= -->
 			<div
 				class="comment-box row justify-content-center mt-5"
 				style="display: none"
 			>
 				<div class="col-lg-12">
 					<h5 class="comment-title">Reply to Comment</h5>
-					<div class="row">
+					<form class="row" method="post" action="/comment">
+						{% csrf_token %}
+						<input type="hidden" name="post_id" value="{{ post.id }}" />
+						<input type="hidden" name="parent_id" value="{{ comment.id }}" />
 						<div class="col-lg-6 mb-3">
-							<label for="comment-name">Name</label>
 							<input
 								type="text"
 								class="form-control"
-								id="comment-name"
+								id="{{ comment_form.name.auto_id }}"
+								name="{{ comment_form.name.html_name }}"
 								placeholder="Enter your name"
 							/>
 						</div>
 						<div class="col-lg-6 mb-3">
-							<label for="comment-email">Email</label>
 							<input
 								type="text"
 								class="form-control"
-								id="comment-email"
+								id="{{ comment_form.email.auto_id }}"
+								name="{{ comment_form.email.html_name }}"
 								placeholder="Enter your email"
 							/>
 						</div>
 						<div class="col-12 mb-3">
-							<label for="comment-message">Message</label>
-
 							<textarea
 								class="form-control"
-								id="comment-message"
-								placeholder="Enter your name"
-								cols="30"
-								rows="10"
+								rows="4"
+								cols="50"
+								placeholder="Write your message..."
+								id="{{ comment_form.body.auto_id }}"
+								name="{{ comment_form.body.html_name }}"
 							></textarea>
 						</div>
-						<div class="col-12">
-							<input type="submit" class="btn btn-primary" value="Post reply" />
-						</div>
-					</div>
+						<input
+							type="submit"
+							class="btn btn-primary col-lg-2 ms-3"
+							value="Post reply"
+						/>
+					</form>
 				</div>
 			</div>
+			<!-- End Comments Form -->
 
+			{% if comment.replies.all %}
 			<div class="comment-replies bg-light p-3 mt-3 rounded">
+
 				<h6 class="comment-replies-title mb-4 text-muted text-uppercase">
-					2 replies
+					{{ comment.replies.all.count }} Repl{{ comment.replies.all.count | pluralize:'y,ies' }}
 				</h6>
 
-				<div class="reply d-flex mb-4">
-					<div class="flex-shrink-0">
-						<div class="avatar avatar-sm rounded-circle">
-							<img class="avatar-img" src={% static 'app/img/avatar.png' %}
-							alt="" class="img-fluid" />
+				{% for reply in comment.replies.all %}
+
+					<div class="reply d-flex mb-4">
+						<div class="flex-shrink-0">
+							<div class="avatar avatar-sm rounded-circle">
+								<img class="avatar-img" src={% static 'app/img/avatar.png' %} alt="" class="img-fluid" />
+							</div>
+						</div>
+						<div class="flex-grow-1 ms-2 ms-sm-3">
+							<div class="reply-meta d-flex align-items-baseline">
+								<h6 class="mb-0 me-2">{{ reply.name }}</h6>
+								<span class="text-muted">2d</span>
+							</div>
+							<div class="reply-body">
+								{{ reply.body }}
+							</div>
 						</div>
 					</div>
-					<div class="flex-grow-1 ms-2 ms-sm-3">
-						<div class="reply-meta d-flex align-items-baseline">
-							<h6 class="mb-0 me-2">Brandon Smith</h6>
-							<span class="text-muted">2d</span>
-						</div>
-						<div class="reply-body">
-							Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-						</div>
-					</div>
-				</div>
-				<div class="reply d-flex">
-					<div class="flex-shrink-0">
-						<div class="avatar avatar-sm rounded-circle">
-							<img class="avatar-img" src={% static 'app/img/avatar.png' %}
-							alt="" class="img-fluid" />
-						</div>
-					</div>
-					<div class="flex-grow-1 ms-2 ms-sm-3">
-						<div class="reply-meta d-flex align-items-baseline">
-							<h6 class="mb-0 me-2">James Parsons</h6>
-							<span class="text-muted">1d</span>
-						</div>
-						<div class="reply-body">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-							Distinctio dolore sed eos sapiente, praesentium.
-						</div>
-					</div>
-				</div>
+
+				{% endfor %}
 			</div>
+			{% endif %}
+			
 		</div>
 	</div>
-	{% endcomment %}
+
+	{% endfor %} 
+
+	<!-- ======= Comments Form ======= -->
+	<div class="row justify-content-center mt-5">
+
+		<div class="col-lg-12">
+			<h5 class="comment-title">Leave a Comment</h5>
+			<form class="row" method="post" action="/comment">
+				{% csrf_token %}
+				<input type="hidden" name="post_id" value="{{ post.id }}">
+				<div class="col-lg-6 mb-3">
+						<input type="text" class="form-control" id="{{ comment_form.name.auto_id }}" name="{{ comment_form.name.html_name }}" placeholder="Enter your name">
+				</div>
+				<div class="col-lg-6 mb-3">
+						<input type="text" class="form-control" id="{{ comment_form.email.auto_id }}" name="{{ comment_form.email.html_name }}" placeholder="Enter your email">
+				</div>
+				<div class="col-12 mb-3">
+					<textarea class="form-control" rows="4" cols="50" placeholder="Write your message..." id="{{ comment_form.body.auto_id }}" name="{{ comment_form.body.html_name }}"></textarea>
+				</div>
+				<input type="submit" class="btn btn-primary col-lg-2 ms-3" value="Post comment">
+			</form>
+		</div>
+	</div>
+	<!-- End Comments Form -->
 </div>
 <!-- End Comments -->
