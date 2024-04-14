@@ -18,14 +18,15 @@ class TagAdmin(admin.ModelAdmin):
 admin.site.register(Tag, TagAdmin)
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('post', 'created_at')
+    list_display = ('name', 'body', 'post', 'created_at')
 
-    # This will help you to disbale add functionality
     def has_add_permission(self, request):
         return False
 
-    # This will help you to disable delete functionaliyt
-    def has_delete_permission(self, request, obj=None):
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+    
+    def has_change_permission(self, request, obj=None):
         return False
 
 admin.site.register(Comment, CommentAdmin)
