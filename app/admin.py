@@ -18,7 +18,7 @@ class TagAdmin(admin.ModelAdmin):
 admin.site.register(Tag, TagAdmin)
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'body', 'post', 'created_at')
+    list_display = ('name', 'body', 'post', 'parent', 'created_at')
 
     def has_add_permission(self, request):
         return False
