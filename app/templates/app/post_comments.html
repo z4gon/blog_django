@@ -2,11 +2,11 @@
 
 <!-- ======= Comments ======= -->
 <div class="comments">
-	{% comment %} {% if post.comments %}
-		<h5 class="comment-title py-4">{{ post.comments.count }} Comment{{ post.comments.count | pluralize:'s' }}</h5>
+	{% if comments %}
+		<h5 class="comment-title py-4">{{ comments.count }} Comment{{ comments.count | pluralize:'s' }}</h5>
 	{% endif %}
 
-	{% for comment in post.comments %}
+	{% for comment in comments %}
 
 		<div class="comment d-flex mb-4">
 			<div class="flex-shrink-0">
@@ -26,7 +26,7 @@
 			</div>
 		</div>
 
-	{% endfor %}  {% endcomment %}
+	{% endfor %} 
 	
 	{% comment %}
 	<div class="comment d-flex mb-4">

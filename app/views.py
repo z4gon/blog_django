@@ -20,30 +20,26 @@ def posts(request):
         return render(request, 'app/posts_list.html', {'posts': posts})
 
 def post(request, post_slug):
-    print('post request')
+    post = None
 
-    if request.POST:
-        print('request.POST')
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            print('CommentForm is valid')
-            comment = form.save(commit=False)
-            post_id = request.POST.get('post_id')
-            post = Post.objects.get(id=post_id)
-            comment.post = post
-            comment.save()
-        else:
-            print('CommentForm is invalid ' + form.errors.as_json())
-    else:
-        print('No request.POST')
-            
     try:
-        post = Post.objects.get(slug=post_slug)
+        if request.POST:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                post_id = request.POST.get('post_id')
+                post = Post.objects.get(id=post_id)
+                comment.post = post
+                comment.save()
+            
+        post = post or Post.objects.get(slug=post_slug)
         post.views_count += 1
         post.save()
+
+        comments = post.comments.all()
         comment_form = CommentForm()
 
     except Post.DoesNotExist:
         return render(request, 'app/404.html', status=404)
 
-    return render(request, 'app/post_details.html', {'post': post, 'comment_form': comment_form})
+    return render(request, 'app/post_details.html', {'post': post, 'comments': comments, 'comment_form': comment_form})
