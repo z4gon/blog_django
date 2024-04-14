@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -43,11 +44,12 @@ class Post(models.Model):
 
     title = models.CharField(max_length=200)
     body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True) 
-    updated_at = models.DateTimeField(auto_now=True) 
     slug = models.SlugField(max_length=200, unique=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     views_count = models.IntegerField(default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True) 
+    updated_at = models.DateTimeField(auto_now=True) 
 
     # relationships
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
@@ -61,3 +63,27 @@ class Post(models.Model):
             self.slug = slugify(self.title)
 
         return super().save(*args, **kwargs)
+    
+class Comment(models.Model):
+    """
+    A model to represent a comment.
+    """
+
+    # on_delete=models.CASCADE
+    #     means that the comment will be deleted if the post is deleted.
+    #     https://docs.djangoproject.com/en/4.2/ref/models/fields/#django.db.models.ForeignKey.on_delete
+
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    body = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # relationships
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='replies')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.name + ' - ' + self.post.title
