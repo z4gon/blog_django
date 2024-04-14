@@ -7,6 +7,7 @@ A Blog built with Django 4
   - [Local Setup](#local-setup)
     - [Create Django Project](#create-django-project)
     - [Create Django App](#create-django-app)
+  - [Extending existing User Model](#extending-existing-user-model)
   - [Custom Auth User](#custom-auth-user)
 
 ## Resources
@@ -32,6 +33,18 @@ python ./manage.py runserver
 
 ```sh
 python ./manage.py startapp app
+```
+
+## Extending existing User Model
+
+```py
+# models.py
+from django.contrib.auth.models import User
+
+
+class Employee(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    department = models.CharField(max_length=100)
 ```
 
 ## Custom Auth User
