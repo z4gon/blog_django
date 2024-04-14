@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Post, Tag, Comment
+from app.models import Post, Subscription, Tag, Comment
 
 # Register your models here.
 
@@ -8,14 +8,10 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content')
     exclude = ('slug', 'views_count')
 
-admin.site.register(Post, PostAdmin)
-
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
     search_fields = ('name', 'description')
     exclude = ('slug',)
-
-admin.site.register(Tag, TagAdmin)
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('name', 'body', 'post', 'parent', 'created_at')
@@ -29,4 +25,10 @@ class CommentAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('email',)
+
+admin.site.register(Post, PostAdmin)
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(Subscription, SubscriptionAdmin)
