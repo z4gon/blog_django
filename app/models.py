@@ -4,6 +4,19 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+# https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#substituting-a-custom-user-model
+# class User(AbstractUser):
+#     slug = models.SlugField(max_length=200, unique=True)
+
+#     def __str__(self):
+#         return self.username
+    
+#     def save(self, *args, **kwargs):
+#         if not self.id: # only on creation
+#             self.slug = slugify(self.username)
+
+#         return super().save(*args, **kwargs)
+    
 class Tag(models.Model):
     """
     A model to represent a tag.
@@ -53,6 +66,7 @@ class Post(models.Model):
 
     # relationships
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
+    # author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -83,7 +97,7 @@ class Comment(models.Model):
     # relationships
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     parent = models.ForeignKey('self', on_delete=models.DO_NOTHING, blank=True, null=True, related_name='replies')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    # author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.name + ' - ' + self.post.title
