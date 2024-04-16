@@ -1,38 +1,38 @@
 .post-entry-1 {
-  margin-bottom: 30px;
-  display: inline-block;
-  padding: 1em;
-  vertical-align: top;
+	margin-bottom: 30px;
+	display: inline-block;
+	padding: 1em;
+	vertical-align: top;
 }
 
-.post-entry-1 img {
-  margin-bottom: 30px;  
-  min-height: 14em;
-  object-fit: cover;
+.post-entry-1 .img-fluid {
+	margin-bottom: 30px;
+	min-height: 14em;
+	object-fit: cover;
 }
 
 .single-post-content .img-fluid {
-  width: 100%;
-  margin-bottom: 3em;
+	width: 100%;
+	margin-bottom: 3em;
 }
 
 .btn-reply {
-  margin-top: 2em;  
-  padding: 0.5em;
-  border-radius: 0.5em;
-  font-size: 12px;
-  letter-spacing: 0.07rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  font-family: var(--font-secondary);
-  cursor: pointer;
+	margin-top: 2em;
+	padding: 0.5em;
+	border-radius: 0.5em;
+	font-size: 12px;
+	letter-spacing: 0.07rem;
+	text-transform: uppercase;
+	font-weight: 600;
+	font-family: var(--font-secondary);
+	cursor: pointer;
 }
 
 .btn-reply:hover {
-  background: black;
-  color: white;
+	background: black;
+	color: white;
 }
 
 .posts-list {
-  margin-bottom: 10em;
+	margin-bottom: 10em;
 }

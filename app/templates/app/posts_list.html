@@ -68,7 +68,7 @@
 							{{ post.title }}
 						</a>
 					</h2>
-					{% comment %} {% if post.author %}
+					{% if post.author %}
 						<div class="comment d-flex mb-4">
 							<div class="flex-shrink-0">
 								<div class="avatar avatar-sm rounded-circle">
@@ -82,7 +82,7 @@
 								</div>
 							</div>
 						</div>
-					{% endif %} {% endcomment %}
+					{% endif %}
 				</div>
 			<!-- card end-->
 			{% endfor %}
