@@ -9,10 +9,12 @@ from app.forms import CommentForm, SubscriptionForm, SearchForm
 # Create your views here.
 
 MAX_POSTS = 50
+MAX_FOOTER_TAGS = 5
 
 common_props = {
     'subscription_form': SubscriptionForm(),
-    'search_form': SearchForm()
+    'search_form': SearchForm(),
+    'footer_tags': Tag.objects.all()[0:MAX_FOOTER_TAGS]
 }
 
 def posts(request):
