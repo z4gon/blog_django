@@ -8,4 +8,5 @@ urlpatterns = [
     path('comment', views.comment, name='comment'),
     path('subscription', views.subscription, name='subscription'),
     path('search', views.search, name='search'),
+    path('about', views.about, name='about'),
 ]
