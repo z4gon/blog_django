@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 # https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#extending-the-existing-user-model
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    username = models.CharField(max_length=200)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=200, unique=True)
@@ -16,11 +15,11 @@ class Author(models.Model):
     updated_at = models.DateTimeField(auto_now=True) 
     
     def __str__(self):
-        return self.username
+        return self.user.username
     
     def save(self, *args, **kwargs):
         if not self.id: # only on creation
-            self.slug = slugify(self.username)
+            self.slug = slugify(self.user.username)
 
         return super().save(*args, **kwargs)
     

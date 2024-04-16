@@ -29,7 +29,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('email',)
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('username', 'image', 'bio')
+    list_display = ('user', 'image', 'bio')
     exclude = ('slug',)
 
 admin.site.register(Post, PostAdmin)
