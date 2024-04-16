@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from app.models import Comment, Post, Tag
+from app.models import Author, Comment, Post, Tag
 from app.forms import CommentForm, SubscriptionForm
 
 # Create your views here.
@@ -18,12 +18,17 @@ def posts(request):
             tag = Tag.objects.get(slug=tag_slug)
             posts = tag.posts.all()[0:MAX_POSTS]
             return render(request, 'app/tag_posts_list.html', {'tag': tag, 'posts': posts, 'subscription_form': subscription_form})
+        elif request.GET.get('author'):
+            author_slug = request.GET.get('author')
+            author = Author.objects.get(slug=author_slug)
+            posts = author.posts.all()[0:MAX_POSTS]
+            return render(request, 'app/author_posts_list.html', {'author': author, 'posts': posts, 'subscription_form': subscription_form})
         else:
             popular_posts = Post.objects.all().order_by('-views_count')[0:MAX_POSTS]
             latest_posts = Post.objects.all()[0:MAX_POSTS]
             return render(request, 'app/posts_list.html', {'popular_posts': popular_posts, 'latest_posts': latest_posts, 'subscription_form': subscription_form})
 
-    except Tag.DoesNotExist:
+    except (Tag.DoesNotExist, Author.DoesNotExist):
         return render(request, 'app/404.html', status=404)
     except Exception:
         return render(request, 'app/500.html', status=500)

@@ -52,27 +52,7 @@
 		<div class="col-lg-12 posts-list row">
 			<h1>Latest Posts</h1>
 			{% for post in latest_posts %}
-			<!-- card -->
-				<div class="post-entry-1 col-lg-3">
-					<a href={% url "post_details" post.slug %}>
-						<img src="{{ post.image.url }}" alt="" class="img-fluid">
-					</a>
-					<div class="post-meta">
-						{% if post.tags.all.0 %}
-							<span class="date">{{post.tags.all.0.name}}</span>
-						{% endif %}
-						<span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
-					</div>
-					<h2>
-						<a href={% url "post_details" post.slug %}>
-							{{ post.title }}
-						</a>
-					</h2>
-					{% if post.author %}
-						{% include "app/author_details.html" with author=post.author %}
-					{% endif %}
-				</div>
-			<!-- card end-->
+				{% include "app/post_card.html" with post=post %}
 			{% endfor %}
 		</div> <!-- End .row -->
 	</div>

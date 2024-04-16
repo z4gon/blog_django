@@ -18,7 +18,7 @@
 					<span>Jul 5th '22</span>
 					<span class="mx-1">&bullet;</span> 
 					{% for tag in post.tags.all %}
-						<a href="{% url "tag_posts_list" %}?tag={{tag.slug}}">
+						<a href="{% url "filtered_posts_list" %}?tag={{tag.slug}}">
 							<span class="date">
 								{{tag.name}}
 							</span> 
