@@ -9,7 +9,7 @@
 				<span class="date">{{post.tags.all.0.name}}</span>
 			</a>
 		{% endif %}
-		<span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+		<span class="mx-1">&bullet;</span> <span>{{ post.updated_at | date }}</span>
 	</div>
 	<h2>
 		<a href={% url "post_details" post.slug %}>

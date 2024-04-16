@@ -9,7 +9,7 @@
 			<a href="{% url "filtered_posts_list" %}?author={{author.slug}}">
 				<h6 class="me-2">{{ author.user.username }}</h6>
 			</a>
-			<span class="text-muted">2d</span>
+			{% comment %} <span class="text-muted">2d</span> {% endcomment %}
 		</div>
 	</div>
 </div>
