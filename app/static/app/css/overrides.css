@@ -36,3 +36,24 @@
 .posts-list {
 	margin-bottom: 10em;
 }
+
+.author {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.author img {
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	border: solid 1px black;
+	object-fit: cover;
+	margin-bottom: 1em;
+}
+
+.author .info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
