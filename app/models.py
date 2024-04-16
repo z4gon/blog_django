@@ -120,3 +120,32 @@ class Subscription(models.Model):
 
     def __str__(self):
         return self.email
+    
+class About(models.Model):
+    """
+    A model to represent the about page.
+    """
+
+    body = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'About'
+    
+class ContactMessage(models.Model):
+    """
+    A model to represent a contact message.
+    """
+
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=250)
+    message = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.email + ' - ' + self.subject

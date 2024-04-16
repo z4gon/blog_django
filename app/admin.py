@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Author, Post, Subscription, Tag, Comment, User
+from app.models import About, Author, ContactMessage, Post, Subscription, Tag, Comment, User
 
 # Register your models here.
 
@@ -32,8 +32,16 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ('user', 'image', 'bio')
     exclude = ('slug',)
 
+class AboutAdmin(admin.ModelAdmin):
+    list_display = ('body', 'created_at', 'updated_at')
+
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('email', 'subject')
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Author, AuthorAdmin)
+admin.site.register(About, AboutAdmin)
+admin.site.register(ContactMessage, ContactMessageAdmin)
