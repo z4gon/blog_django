@@ -7,8 +7,11 @@ A Blog built with Django 4
   - [Local Setup](#local-setup)
     - [Create Django Project](#create-django-project)
     - [Create Django App](#create-django-app)
-  - [Extending existing User Model](#extending-existing-user-model)
-  - [Custom Auth User](#custom-auth-user)
+  - [Auth Users](#auth-users)
+    - [Extending existing User Model](#extending-existing-user-model)
+    - [Custom Auth User](#custom-auth-user)
+  - [ORM](#orm)
+    - [Complex Queries](#complex-queries)
 
 ## Resources
 
@@ -35,7 +38,9 @@ python ./manage.py runserver
 python ./manage.py startapp app
 ```
 
-## Extending existing User Model
+## Auth Users
+
+### Extending existing User Model
 
 ```py
 # models.py
@@ -47,7 +52,7 @@ class Employee(models.Model):
     department = models.CharField(max_length=100)
 ```
 
-## Custom Auth User
+### Custom Auth User
 
 See the [doc](https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#substituting-a-custom-user-model)
 
@@ -73,4 +78,19 @@ from django.contrib.auth.admin import UserAdmin
 from .models import User
 
 admin.site.register(User, UserAdmin)
+```
+
+## ORM
+
+### Complex Queries
+
+Read the [doc](https://docs.djangoproject.com/en/4.2/topics/db/queries/#complex-lookups-with-q-objects)
+
+```py
+from django.db.models import Q
+
+# OR
+posts = Post.objects.filter(
+    Q(title__icontains=q_text) | Q(body__icontains=q_text)
+)[0:MAX_POSTS]
 ```

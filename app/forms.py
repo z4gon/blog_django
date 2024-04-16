@@ -18,3 +18,10 @@ class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
         fields = ['email']
+
+class SearchForm(forms.Form):
+    """
+    A form to represent a search query.
+    """
+
+    query = forms.CharField(max_length=200)

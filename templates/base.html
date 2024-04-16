@@ -72,12 +72,16 @@
 				<!-- .navbar -->
 
 				<div class="position-relative d-flex align-items-center">
-					<!-- ======= Search Form ======= -->
-					<span class="icon me-2 bi-search"></span>
-					<form action="search-result.html" class="search-form">
-						<input type="text" placeholder="Search" class="form-control" />
-					</form>
-					<!-- End Search Form -->
+					{% if search_form %}
+						<!-- ======= Search Form ======= -->
+						<span class="icon me-2 bi-search"></span>
+						<form action="/search" method="post" class="search-form">
+							{% csrf_token %}
+							<input type="text" placeholder="Search" class="form-control" id="{{ comment_form.query.auto_id }}" name="{{ search_form.query.html_name }}" />
+							<input type="submit" hidden />
+						</form>
+						<!-- End Search Form -->
+					{% endif %}
 				</div>
 			</div>
 		</header>
