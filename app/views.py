@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from app.models import About, Author, Comment, ContactInformation, Post, Tag
-from app.forms import CommentForm, SubscriptionForm, SearchForm
+from app.forms import CommentForm, ContactMessageForm, SubscriptionForm, SearchForm
 
 # Create your views here.
 
@@ -121,8 +121,15 @@ def about(request):
 
 def contact(request):
     try:
-        info = ContactInformation.objects.all()[0:1][0]
-        return render(request, 'app/contact.html', {'info': info,  **common_props})
+        if request.POST:
+            contact_message_form = ContactMessageForm(request.POST)
+            if contact_message_form.is_valid():
+                contact_message_form.save()
+                return render(request, 'app/contact_message_successful.html')
+            
+        contact_info = ContactInformation.objects.all()[0:1][0]
+        contact_message_form = ContactMessageForm()
+        return render(request, 'app/contact.html', {'contact_info': contact_info, 'contact_message_form': contact_message_form,  **common_props})
 
     except Exception as e:
         print(e)

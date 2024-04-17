@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Comment, Subscription
+from app.models import Comment, Subscription, ContactMessage
 
 class CommentForm(forms.ModelForm):
     """
@@ -18,6 +18,15 @@ class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
         fields = ['email']
+
+class ContactMessageForm(forms.ModelForm):
+    """
+    A form to represent a contact message.
+    """
+
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'email', 'subject', 'message']
 
 class SearchForm(forms.Form):
     """

@@ -39,7 +39,7 @@ class ContactInformationAdmin(admin.ModelAdmin):
     list_display = ('email', 'address', 'phone', 'created_at', 'updated_at')
 
 class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ('email', 'subject')
+    list_display = ('email', 'name', 'subject')
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Tag, TagAdmin)
