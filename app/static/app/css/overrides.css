@@ -64,11 +64,13 @@
 
 .contact {
 	padding: 0;
+	margin-top: 10em;
 }
 
 .contact .php-email-form {
 	padding: 0;
 	background: transparent;
+	box-shadow: none;
 }
 
 .contact .php-email-form button[type="submit"] {

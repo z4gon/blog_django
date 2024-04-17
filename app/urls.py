@@ -1,5 +1,5 @@
 from app import views
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
     path('', views.posts, name='posts_list'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('search', views.search, name='search'),
     path('about', views.about, name='about'),
     path('contact', views.contact, name='contact'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

@@ -1,5 +1,5 @@
 {% if subscription_form and not request.session.subscribed %}
-<section id="contact" class="contact mb-5">
+<section class="mb-5">
 	<div class="container" data-aos="fade-up">
 		<form action="/subscribe" method="post" role="form" class="php-email-form">
 			{% csrf_token %}
@@ -20,6 +20,5 @@
 			</div>
 		</form>
 	</div>
-	<!-- End Contact Form -->
 </section>
 {% endif %}
