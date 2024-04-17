@@ -14,6 +14,9 @@ A Blog built with Django 4
     - [Complex Queries](#complex-queries)
   - [Sessions](#sessions)
     - [Store Session Data](#store-session-data)
+  - [Auth](#auth)
+    - [URLs](#urls)
+    - [Login](#login)
 
 ## Resources
 
@@ -115,4 +118,61 @@ def subscribe(request):
         if form.is_valid():
             ...
             request.session["subscribed"] = True
+```
+
+## Auth
+
+### URLs
+
+```py
+# urls.py
+
+urlpatterns = [
+    path('accounts/', include('django.contrib.auth.urls')),
+]
+```
+
+It will add all the necessary urls:
+
+```
+accounts/ login/ [name='login']
+accounts/ logout/ [name='logout']
+accounts/ password_change/ [name='password_change']
+accounts/ password_change/done/ [name='password_change_done']
+accounts/ password_reset/ [name='password_reset']
+accounts/ password_reset/done/ [name='password_reset_done']
+accounts/ reset/<uidb64>/<token>/ [name='password_reset_confirm']
+accounts/ reset/done/ [name='password_reset_complete']
+```
+
+But the templates need to be provided:
+
+```
+TemplateDoesNotExist at /accounts/login/
+registration/login.html
+```
+
+### Login
+
+```py
+# settings.py
+
+LOGIN_REDIRECT_URL = '/'
+```
+
+```html
+<!-- app/templates/registration/login.html -->
+
+<form action="{% url 'login' %}" method="post" role="form">
+	{% csrf_token %}
+	<input
+		name="{{ form.username.html_name }}"
+		id="{{ form.username.auto_id }}"
+	/>
+	<input
+		name="{{ form.password.html_name }}"
+		id="{{ form.password.auto_id }}"
+	/>
+	<button type="submit" class="rounded">Login</button>
+</form>
 ```
