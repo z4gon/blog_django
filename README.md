@@ -16,7 +16,8 @@ A Blog built with Django 4
     - [Store Session Data](#store-session-data)
   - [Auth](#auth)
     - [URLs](#urls)
-    - [Login](#login)
+    - [Log in](#log-in)
+    - [Log Out](#log-out)
 
 ## Resources
 
@@ -152,7 +153,7 @@ TemplateDoesNotExist at /accounts/login/
 registration/login.html
 ```
 
-### Login
+### Log in
 
 ```py
 # settings.py
@@ -173,6 +174,42 @@ LOGIN_REDIRECT_URL = '/'
 		name="{{ form.password.html_name }}"
 		id="{{ form.password.auto_id }}"
 	/>
-	<button type="submit" class="rounded">Login</button>
+	<button type="submit" class="rounded">Log In</button>
 </form>
 ```
+
+### Log Out
+
+Move all the admin apps below the auth app
+
+```py
+# settings.py
+
+INSTALLED_APPS = [
+    'django.contrib.auth',
+    ...
+    'jazzmin',
+    'django.contrib.admin',
+]
+```
+
+```html
+<!-- app/templates/base.html -->
+
+<div class="position-relative d-flex align-items-center">
+	{% if request.user.is_authenticated %}
+	<p class="logged-in-user">
+		Welcome, <strong>{{ request.user.username }}</strong>!
+	</p>
+	<a href="{% url 'logout' %}" class="logo d-flex align-items-center">
+		<button class="btn btn-primary">Log Out</button>
+	</a>
+	{% else %}
+	<a href="{% url 'login' %}" class="logo d-flex align-items-center">
+		<button class="btn btn-primary">Log In</button>
+	</a>
+	{% endif %}
+</div>
+```
+
+Override the `logged_out.html` template

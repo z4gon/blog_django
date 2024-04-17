@@ -57,10 +57,21 @@
 			<div
 				class="container-fluid container-xl d-flex align-items-center justify-content-between"
 			>
-				<a href="/" class="logo d-flex align-items-center">
-					<img src="{% static 'app/img/awesome.png' %}" alt="">
-					<h2 class="header-title">AwesomeBlog</h2>
-				</a>
+				<div class="position-relative d-flex align-items-center">
+					<a href="/" class="logo d-flex align-items-center">
+						<img src="{% static 'app/img/awesome.png' %}" alt="">
+						<h2 class="header-title">AwesomeBlog</h2>
+					</a>
+					{% if search_form %}
+						<!-- ======= Search Form ======= -->
+						<form action="/search" method="post" class="search-form">
+							{% csrf_token %}
+							<input type="text" placeholder="Search" class="form-control" id="{{ comment_form.query.auto_id }}" name="{{ search_form.query.html_name }}" />
+							<input type="submit" hidden />
+						</form>
+						<!-- End Search Form -->
+					{% endif %}
+				</div>
 
 				<nav id="navbar" class="navbar">
 					<ul>
@@ -71,15 +82,15 @@
 				<!-- .navbar -->
 
 				<div class="position-relative d-flex align-items-center">
-					{% if search_form %}
-						<!-- ======= Search Form ======= -->
-						<span class="icon me-2 bi-search"></span>
-						<form action="/search" method="post" class="search-form">
-							{% csrf_token %}
-							<input type="text" placeholder="Search" class="form-control" id="{{ comment_form.query.auto_id }}" name="{{ search_form.query.html_name }}" />
-							<input type="submit" hidden />
-						</form>
-						<!-- End Search Form -->
+					{% if request.user.is_authenticated %}
+						<p class="logged-in-user">Welcome, <strong>{{ request.user.username }}</strong>!</p>
+						<a href="{% url 'logout' %}" class="logo d-flex align-items-center">
+							<button class="btn btn-primary">Log Out</button>
+						</a>
+					{% else %}
+						<a href="{% url 'login' %}" class="logo d-flex align-items-center">
+							<button class="btn btn-primary">Log In</button>
+						</a>
 					{% endif %}
 				</div>
 			</div>

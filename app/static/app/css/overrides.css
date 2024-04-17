@@ -76,3 +76,11 @@
 .contact .php-email-form button[type="submit"] {
 	background: var(--bs-link-color);
 }
+
+.search-form {
+	margin-left: 1em;
+}
+
+.logged-in-user {
+	margin: 0 1em 0 0;
+}
