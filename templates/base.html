@@ -84,6 +84,9 @@
 				<div class="position-relative d-flex align-items-center">
 					{% if request.user.is_authenticated %}
 						<p class="logged-in-user">Welcome, <strong>{{ request.user.username }}</strong>!</p>
+						{% if request.user.author %}
+							<img class="logged-in-img" src={{ request.user.author.image.url }} alt="" class="img-fluid" />
+						{% endif %}
 						<a href="{% url 'logout' %}" class="logo d-flex align-items-center">
 							<button class="btn btn-primary">Log Out</button>
 						</a>

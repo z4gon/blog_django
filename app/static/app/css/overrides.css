@@ -84,3 +84,16 @@
 .logged-in-user {
 	margin: 0 1em 0 0;
 }
+
+.logged-in-img {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: solid 1px black;
+	margin-right: 1em;
+}
+
+.avatar-img {
+	border: solid 1px black;
+}
