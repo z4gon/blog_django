@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from app.models import About, Author, Comment, Post, Tag
+from app.models import About, Author, Comment, ContactInformation, Post, Tag
 from app.forms import CommentForm, SubscriptionForm, SearchForm
 
 # Create your views here.
@@ -112,8 +112,18 @@ def search(request):
 
 def about(request):
     try:
-        about = About.objects.all()[0:1]
-        return render(request, 'app/about.html', {'about': about[0], **common_props})
+        about = About.objects.all()[0:1][0]
+        return render(request, 'app/about.html', {'about': about, **common_props})
 
     except Exception:
+        return render(request, 'app/500.html', status=500) 
+    
+
+def contact(request):
+    try:
+        info = ContactInformation.objects.all()[0:1][0]
+        return render(request, 'app/contact.html', {'info': info,  **common_props})
+
+    except Exception as e:
+        print(e)
         return render(request, 'app/500.html', status=500) 
