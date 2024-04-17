@@ -174,6 +174,13 @@ LOGIN_REDIRECT_URL = '/'
 		name="{{ form.password.html_name }}"
 		id="{{ form.password.auto_id }}"
 	/>
+  {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+    {% endfor %}
+  {% endif %}
 	<button type="submit" class="rounded">Log In</button>
 </form>
 ```
