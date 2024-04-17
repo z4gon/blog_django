@@ -12,6 +12,8 @@ A Blog built with Django 4
     - [Custom Auth User](#custom-auth-user)
   - [ORM](#orm)
     - [Complex Queries](#complex-queries)
+  - [Sessions](#sessions)
+    - [Store Session Data](#store-session-data)
 
 ## Resources
 
@@ -93,4 +95,24 @@ from django.db.models import Q
 posts = Post.objects.filter(
     Q(title__icontains=q_text) | Q(body__icontains=q_text)
 )[0:MAX_POSTS]
+```
+
+## Sessions
+
+### Store Session Data
+
+```html
+<!-- subscription_form.html -->
+{% if subscription_form and not request.session.subscribed %} ... {% endif %}
+```
+
+```py
+# views.py
+
+def subscribe(request):
+    if request.method == "POST":
+        ...
+        if form.is_valid():
+            ...
+            request.session["subscribed"] = True
 ```

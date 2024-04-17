@@ -87,12 +87,13 @@ def comment(request):
     except Exception:
         return render(request, 'app/500.html', status=500)
     
-def subscription(request):
+def subscribe(request):
     try:
         if request.POST:
             form = SubscriptionForm(request.POST)
             if form.is_valid():
                 form.save()
+                request.session['subscribed'] = True
                 return render(request, 'app/subscription_successful.html')
 
     except Exception:
