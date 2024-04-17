@@ -33,7 +33,7 @@ class AuthorAdmin(admin.ModelAdmin):
     exclude = ('slug',)
 
 class AboutAdmin(admin.ModelAdmin):
-    list_display = ('body', 'created_at', 'updated_at')
+    list_display = ('created_at', 'updated_at')
 
 class ContactInformationAdmin(admin.ModelAdmin):
     list_display = ('email', 'address', 'phone', 'created_at', 'updated_at')
