@@ -180,7 +180,8 @@ LOGIN_REDIRECT_URL = '/'
 
 ### Log Out
 
-Move all the admin apps below the auth app
+Move all the admin apps below the auth app,
+so that the logout url from the app takes precedence
 
 ```py
 # settings.py
