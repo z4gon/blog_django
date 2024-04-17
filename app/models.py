@@ -134,6 +134,21 @@ class About(models.Model):
     def __str__(self):
         return 'About'
     
+class ContactInformation(models.Model):
+    """
+    A model to represent the contact information.
+    """
+
+    address = models.CharField(max_length=200)
+    phone = models.CharField(max_length=20)
+    email = models.EmailField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.address + ' - ' + self.phone + ' - ' + self.email
+    
 class ContactMessage(models.Model):
     """
     A model to represent a contact message.
