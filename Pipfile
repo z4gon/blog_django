@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 django = "==4.2.11"
 pillow = "==10.3.0"
-django-jazzmin = "*"
+django-jazzmin = "==2.6.1"
 
 [dev-packages]
 
