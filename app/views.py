@@ -54,6 +54,8 @@ def post(request, post_slug):
         post.views_count += 1
         post.save()
 
+        is_bookmarked = request.user.is_authenticated and post.bookmarkers.filter(id=request.user.id).exists()
+
         comments = post.comments.filter(parent=None)
         comment_form = CommentForm()
 
@@ -62,7 +64,7 @@ def post(request, post_slug):
     except Exception:
         return render(request, 'app/500.html', status=500)
 
-    return render(request, 'app/post_details.html', {'post': post, 'root_comments': comments, 'comment_form': comment_form, **common_props})
+    return render(request, 'app/post_details.html', {'post': post, 'is_bookmarked': is_bookmarked , 'root_comments': comments, 'comment_form': comment_form, **common_props})
 
 def comment(request):
     try:
@@ -166,9 +168,8 @@ def register(request):
             
         register_form = RegisterForm()
         return render(request, 'registration/registration.html', {'register_form': register_form})
-
-    except Exception as e:
-        print(e)
+    
+    except Exception:
         return render(request, 'app/500.html', status=500) 
 
 
@@ -177,3 +178,24 @@ def handle_uploaded_image(file):
     with open(f"{settings.MEDIA_ROOT}/images/{file.name}", 'wb+') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
+
+
+def bookmark(request, post_slug):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login') + f"?next={reverse('post_details', args=[post_slug])}")
+
+    try:
+        post = Post.objects.get(slug=post_slug)
+
+        if not post.bookmarkers.filter(id=request.user.id).exists():
+            post.bookmarkers.add(request.user)
+        else:
+            post.bookmarkers.remove(request.user)
+
+        return HttpResponseRedirect(reverse('post_details', args=[post_slug]))
+    
+    except Post.DoesNotExist:
+        return render(request, 'app/404.html', status=404)
+    
+    except Exception:
+        return render(request, 'app/500.html', status=500) 
