@@ -74,12 +74,12 @@
 						</div>
 					{% endfor %}
 				{% endif %}
-				{% if register_form.error_messages and register_form.password1.value %}
-					{% for error in register_form.error_messages.values %}
-						<div class="alert alert-danger" role="alert">
+				{% if register_form.errors %}
+					<div class="alert alert-danger" role="alert">
+						{% for error in register_form.errors.values %}
 							{{ error }}
-						</div>
-					{% endfor %}
+						{% endfor %}
+					</div>
 				{% endif %}
 
 				<button type="submit" class="rounded">Create Account</button>

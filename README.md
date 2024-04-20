@@ -19,7 +19,7 @@ A Blog built with Django 4
     - [Login](#login)
     - [Log Out](#log-out)
     - [Register](#register)
-- [views.py](#viewspy)
+      - [Custom Errors](#custom-errors)
 
 ## Resources
 
@@ -176,13 +176,9 @@ LOGIN_REDIRECT_URL = '/'
 		name="{{ form.password.html_name }}"
 		id="{{ form.password.auto_id }}"
 	/>
-  {% if form.non_field_errors %}
-    {% for error in form.non_field_errors %}
-      <div class="alert alert-danger" role="alert">
-        {{ error }}
-      </div>
-    {% endfor %}
-  {% endif %}
+	{% if form.non_field_errors %} {% for error in form.non_field_errors %}
+	<div class="alert alert-danger" role="alert">{{ error }}</div>
+	{% endfor %} {% endif %}
 	<button type="submit" class="rounded">Login</button>
 </form>
 ```
@@ -270,11 +266,32 @@ def register(request):
                     return HttpResponseRedirect(reverse('posts_list'))
             else:
                 return render(request, 'registration/registration.html', {'register_form': register_form})
-            
+
         register_form = RegisterForm()
         return render(request, 'registration/registration.html', {'register_form': register_form})
 
     except Exception as e:
         print(e)
-        return render(request, 'app/500.html', status=500) 
+        return render(request, 'app/500.html', status=500)
+```
+
+#### Custom Errors
+
+```py
+# forms.py
+
+class RegisterForm(UserCreationForm):
+    ...
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('Username already exists.')
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('Email already exists.')
+        return email
 ```
