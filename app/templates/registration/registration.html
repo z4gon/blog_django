@@ -12,7 +12,7 @@
 		</div>
 
 		<div class="form mt-5 login-form-container">
-			<form action="{% url 'register' %}" method="post" role="form" class="php-email-form">
+			<form action="{% url 'register' %}" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
 				{% csrf_token %}
 				<div class="row">
 					<div class="form-group col-md-12">
@@ -62,6 +62,19 @@
 							id="{{ register_form.password2.auto_id }}"
 							value="{{ register_form.password2.value|default:'' }}"
 							placeholder="Confirm Password"
+							required
+						/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-md-12">
+						<label for="{{ register_form.image.auto_id }}">Profile Picture</label>
+						<input
+							type="file"
+							name="{{ register_form.image.html_name }}"
+							class="form-control rounded"
+							id="{{ register_form.image.auto_id }}"
+							value="{{ register_form.image.value|default:'' }}"
 							required
 						/>
 					</div>

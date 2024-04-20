@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from app.models import Comment, Subscription, ContactMessage
+from app.validators import validate_image_file_extension
 
 class CommentForm(forms.ModelForm):
     """
@@ -46,6 +47,8 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+    image = forms.ImageField(required=True, validators=[validate_image_file_extension])
 
     def clean_username(self):
         username = self.cleaned_data['username']

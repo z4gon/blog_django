@@ -20,6 +20,7 @@ A Blog built with Django 4
     - [Log Out](#log-out)
     - [Register](#register)
       - [Custom Errors](#custom-errors)
+      - [Upload Profile Image](#upload-profile-image)
 
 ## Resources
 
@@ -294,4 +295,59 @@ class RegisterForm(UserCreationForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('Email already exists.')
         return email
+```
+
+#### Upload Profile Image
+
+```py
+# validators.py
+
+import os
+from django.core.exceptions import ValidationError
+
+def validate_image_file_extension(value):
+    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+    valid_extensions = ['.jpg', '.png']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError('Unsupported file extension. Supported extensions are .jpg and .png.')
+```
+
+```py
+# forms.py
+
+from app.validators import validate_image_file_extension
+
+class RegisterForm(UserCreationForm):
+    ...
+
+    image = forms.ImageField(required=True, validators=[validate_image_file_extension])
+```
+
+```py
+# views.py
+
+from blog_django import settings
+
+def register(request):
+    try:
+        if request.POST:
+            register_form = RegisterForm(request.POST, request.FILES)
+            if register_form.is_valid():
+                ...
+
+                image_file = register_form.cleaned_data.get('image')
+                handle_uploaded_image(image_file)
+                author = Author(
+                    user=user,
+                    image=f"images/{image_file.name}"
+                )
+                author.save()
+
+                ...
+
+def handle_uploaded_image(file):
+    # save file in storage using the MEDIA_ROOT
+    with open(f"{settings.MEDIA_ROOT}/images/{file.name}", 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
 ```

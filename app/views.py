@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 
 from app.models import About, Author, Comment, ContactInformation, Post, Tag
 from app.forms import CommentForm, ContactMessageForm, SubscriptionForm, SearchForm, RegisterForm
+from blog_django import settings
 
 # Create your views here.
 
@@ -140,15 +141,23 @@ def contact(request):
 def register(request):
     try:
         if request.POST:
-            register_form = RegisterForm(request.POST)
+            register_form = RegisterForm(request.POST, request.FILES)
             if register_form.is_valid():
+                # create user
                 register_form.save()
+                
+                # authenticate
                 user = authenticate(username=register_form.cleaned_data.get('username'), password=register_form.cleaned_data.get('password1'))
+
+                # create author
+                image_file = register_form.cleaned_data.get('image')
+                handle_uploaded_image(image_file)
                 author = Author(
                     user=user,
-                    image=''
+                    image=f"images/{image_file.name}"
                 )
                 author.save()
+
                 if user:
                     login(request, user)
                     return HttpResponseRedirect(reverse('posts_list'))
@@ -161,4 +170,10 @@ def register(request):
     except Exception as e:
         print(e)
         return render(request, 'app/500.html', status=500) 
-        
+
+
+def handle_uploaded_image(file):
+    # save file in storage using the MEDIA_ROOT
+    with open(f"{settings.MEDIA_ROOT}/images/{file.name}", 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
