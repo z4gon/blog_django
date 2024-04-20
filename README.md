@@ -16,7 +16,7 @@ A Blog built with Django 4
     - [Store Session Data](#store-session-data)
   - [Auth](#auth)
     - [URLs](#urls)
-    - [Log in](#log-in)
+    - [Login](#login)
     - [Log Out](#log-out)
 
 ## Resources
@@ -153,7 +153,7 @@ TemplateDoesNotExist at /accounts/login/
 registration/login.html
 ```
 
-### Log in
+### Login
 
 ```py
 # settings.py
@@ -181,7 +181,7 @@ LOGIN_REDIRECT_URL = '/'
       </div>
     {% endfor %}
   {% endif %}
-	<button type="submit" class="rounded">Log In</button>
+	<button type="submit" class="rounded">Login</button>
 </form>
 ```
 
@@ -214,7 +214,7 @@ INSTALLED_APPS = [
 	</a>
 	{% else %}
 	<a href="{% url 'login' %}" class="logo d-flex align-items-center">
-		<button class="btn btn-primary">Log In</button>
+		<button class="btn btn-primary">Login</button>
 	</a>
 	{% endif %}
 </div>

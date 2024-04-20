@@ -97,3 +97,19 @@
 .avatar-img {
 	border: solid 1px black;
 }
+
+.login-form-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.login-form-container > form {
+	width: 400px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+	margin-bottom: 8em;
+}

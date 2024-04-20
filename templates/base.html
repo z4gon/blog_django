@@ -88,11 +88,11 @@
 							<img class="logged-in-img" src={{ request.user.author.image.url }} alt="" class="img-fluid" />
 						{% endif %}
 						<a href="{% url 'logout' %}" class="logo d-flex align-items-center">
-							<button class="btn btn-primary">Log Out</button>
+							<button class="btn btn-primary">Logout</button>
 						</a>
 					{% else %}
 						<a href="{% url 'login' %}" class="logo d-flex align-items-center">
-							<button class="btn btn-primary">Log In</button>
+							<button class="btn btn-primary">Login</button>
 						</a>
 					{% endif %}
 				</div>
