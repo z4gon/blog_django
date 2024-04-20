@@ -1,4 +1,7 @@
 from django import forms
+
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from app.models import Comment, Subscription, ContactMessage
 
 class CommentForm(forms.ModelForm):
@@ -34,3 +37,12 @@ class SearchForm(forms.Form):
     """
 
     query = forms.CharField(max_length=200)
+
+class RegisterForm(UserCreationForm):
+    """
+    A form to represent a user registration.
+    """
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']

@@ -2,9 +2,10 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth import authenticate, login
 
 from app.models import About, Author, Comment, ContactInformation, Post, Tag
-from app.forms import CommentForm, ContactMessageForm, SubscriptionForm, SearchForm
+from app.forms import CommentForm, ContactMessageForm, SubscriptionForm, SearchForm, RegisterForm
 
 # Create your views here.
 
@@ -132,6 +133,32 @@ def contact(request):
         contact_message_form = ContactMessageForm()
         return render(request, 'app/contact.html', {'contact_info': contact_info, 'contact_message_form': contact_message_form,  **common_props})
 
+    except Exception:
+        return render(request, 'app/500.html', status=500) 
+    
+
+def register(request):
+    try:
+        if request.POST:
+            register_form = RegisterForm(request.POST)
+            if register_form.is_valid():
+                register_form.save()
+                user = authenticate(username=register_form.cleaned_data.get('username'), password=register_form.cleaned_data.get('password1'))
+                author = Author(
+                    user=user,
+                    image=''
+                )
+                author.save()
+                if user:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('posts_list'))
+            else:
+                return render(request, 'registration/registration.html', {'register_form': register_form})
+            
+        register_form = RegisterForm()
+        return render(request, 'registration/registration.html', {'register_form': register_form})
+
     except Exception as e:
         print(e)
         return render(request, 'app/500.html', status=500) 
+        

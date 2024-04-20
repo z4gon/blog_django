@@ -113,3 +113,9 @@
 	align-items: stretch;
 	margin-bottom: 8em;
 }
+
+.login-form-container .register-link {
+	text-align: center;
+	color: var(--bs-link-color);
+	padding: 1em;
+}

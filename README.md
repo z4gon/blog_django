@@ -18,6 +18,8 @@ A Blog built with Django 4
     - [URLs](#urls)
     - [Login](#login)
     - [Log Out](#log-out)
+    - [Register](#register)
+- [views.py](#viewspy)
 
 ## Resources
 
@@ -221,3 +223,58 @@ INSTALLED_APPS = [
 ```
 
 Override the `logged_out.html` template
+
+### Register
+
+```py
+# urls.py
+
+path('accounts/register', views.register, name='register'),
+```
+
+```py
+# forms.py
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
+class RegisterForm(UserCreationForm):
+    """
+    A form to represent a user registration.
+    """
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+```
+
+```py
+# views.py
+
+from django.contrib.auth import authenticate, login
+from app.forms import RegisterForm
+
+def register(request):
+    try:
+        if request.POST:
+            register_form = RegisterForm(request.POST)
+            if register_form.is_valid():
+                register_form.save()
+                user = authenticate(username=register_form.cleaned_data.get('username'), password=register_form.cleaned_data.get('password1'))
+                author = Author(
+                    user=user,
+                    image=''
+                )
+                author.save()
+                if user:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('posts_list'))
+            else:
+                return render(request, 'registration/registration.html', {'register_form': register_form})
+            
+        register_form = RegisterForm()
+        return render(request, 'registration/registration.html', {'register_form': register_form})
+
+    except Exception as e:
+        print(e)
+        return render(request, 'app/500.html', status=500) 
+```
