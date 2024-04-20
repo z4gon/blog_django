@@ -73,6 +73,7 @@ class Post(models.Model):
     # relationships
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, blank=True, null=True, related_name='posts')
+    bookmarkers = models.ManyToManyField(User, blank=True, related_name='bookmarks')
 
     def __str__(self):
         return self.title
