@@ -316,3 +316,22 @@ class LikeView(View):
         
         except Exception:
             return render(request, 'app/500.html', status=500)
+        
+
+class LikesView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('login'))
+
+        try:
+            posts = request.user.likes.all()[0:MAX_POSTS]
+
+            context = {
+                'posts': posts,
+                **common_props
+            }
+
+            return render(request, 'app/liked_posts_list.html', context)
+
+        except Exception:
+            return render(request, 'app/500.html', status=500) 

@@ -1,4 +1,4 @@
-from app.views import PostsView, PostView, CommentView, SubscriptionView, SearchView, AboutView, ContactView, RegistrationView, BookmarkView, BookmarksView, LikeView
+from app.views import PostsView, PostView, CommentView, SubscriptionView, SearchView, AboutView, ContactView, RegistrationView, BookmarkView, BookmarksView, LikeView, LikesView
 from django.urls import path, include
 
 urlpatterns = [
@@ -15,4 +15,5 @@ urlpatterns = [
     path('bookmark/<slug:post_slug>', BookmarkView.as_view(), name='bookmark'),
     path('bookmarks', BookmarksView.as_view(), name='bookmarks'),
     path('like/<slug:post_slug>', LikeView.as_view(), name='like'),
+    path('likes', LikesView.as_view(), name='likes'),
 ]
