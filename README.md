@@ -47,6 +47,31 @@ python ./manage.py runserver
 python ./manage.py startapp app
 ```
 
+## Views
+
+```py
+# views.py
+
+from django.views import View
+
+class ContactView(View):
+    def get(self, request):
+        ...
+        
+    def post(self, request):
+        ...
+```
+
+```py
+# urls.py
+
+from app.views import ContactView
+
+urlpatterns = [
+    path('contact/', ContactView.as_view(), name='contact'),
+]
+```
+
 ## Auth Users
 
 ### Extending existing User Model

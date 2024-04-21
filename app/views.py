@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
+from django.views import View
 
 from app.models import About, Author, Comment, ContactInformation, Post, Tag
 from app.forms import CommentForm, ContactMessageForm, SubscriptionForm, SearchForm, RegisterForm
@@ -19,56 +20,58 @@ common_props = {
     'footer_tags': Tag.objects.all()[0:MAX_FOOTER_TAGS]
 }
 
-def posts(request):
-    try:
-        if request.GET.get('tag'):
-            tag_slug = request.GET.get('tag')
-            tag = Tag.objects.get(slug=tag_slug)
-            posts = tag.posts.all()[0:MAX_POSTS]
-            return render(request, 'app/tag_posts_list.html', {'tag': tag, 'posts': posts, **common_props})
-        elif request.GET.get('author'):
-            author_slug = request.GET.get('author')
-            author = Author.objects.get(slug=author_slug)
-            posts = author.posts.all()[0:MAX_POSTS]
-            return render(request, 'app/author_posts_list.html', {'author': author, 'posts': posts, **common_props})
-        elif request.GET.get('q'):
-            q_text = request.GET.get('q')
-            posts = Post.objects.filter(
-                Q(title__icontains=q_text) | Q(body__icontains=q_text)
-            )[0:MAX_POSTS]
-            return render(request, 'app/search_results_posts_list.html', {'q_text': q_text, 'posts': posts, **common_props})
-        else:
-            popular_posts = Post.objects.all().order_by('-views_count')[0:MAX_POSTS]
-            latest_posts = Post.objects.all()[0:MAX_POSTS]
-            return render(request, 'app/posts_list.html', {'popular_posts': popular_posts, 'latest_posts': latest_posts, **common_props})
+class PostsView(View):
+    def get(self, request):
+        try:
+            if request.GET.get('tag'):
+                tag_slug = request.GET.get('tag')
+                tag = Tag.objects.get(slug=tag_slug)
+                posts = tag.posts.all()[0:MAX_POSTS]
+                return render(request, 'app/tag_posts_list.html', {'tag': tag, 'posts': posts, **common_props})
+            elif request.GET.get('author'):
+                author_slug = request.GET.get('author')
+                author = Author.objects.get(slug=author_slug)
+                posts = author.posts.all()[0:MAX_POSTS]
+                return render(request, 'app/author_posts_list.html', {'author': author, 'posts': posts, **common_props})
+            elif request.GET.get('q'):
+                q_text = request.GET.get('q')
+                posts = Post.objects.filter(
+                    Q(title__icontains=q_text) | Q(body__icontains=q_text)
+                )[0:MAX_POSTS]
+                return render(request, 'app/search_results_posts_list.html', {'q_text': q_text, 'posts': posts, **common_props})
+            else:
+                popular_posts = Post.objects.all().order_by('-views_count')[0:MAX_POSTS]
+                latest_posts = Post.objects.all()[0:MAX_POSTS]
+                return render(request, 'app/posts_list.html', {'popular_posts': popular_posts, 'latest_posts': latest_posts, **common_props})
 
-    except (Tag.DoesNotExist, Author.DoesNotExist):
-        return render(request, 'app/404.html', status=404)
-    except Exception as e:
-        print(e)
-        return render(request, 'app/500.html', status=500)
-    
-def post(request, post_slug):
-    try:
-        post = Post.objects.get(slug=post_slug)
-        post.views_count += 1
-        post.save()
+        except (Tag.DoesNotExist, Author.DoesNotExist):
+            return render(request, 'app/404.html', status=404)
+        except Exception as e:
+            print(e)
+            return render(request, 'app/500.html', status=500)
 
-        is_bookmarked = request.user.is_authenticated and post.bookmarkers.filter(id=request.user.id).exists()
+class PostView(View):
+    def get(self, request, post_slug):
+        try:
+            post = Post.objects.get(slug=post_slug)
+            post.views_count += 1
+            post.save()
 
-        comments = post.comments.filter(parent=None)
-        comment_form = CommentForm()
+            is_bookmarked = request.user.is_authenticated and post.bookmarkers.filter(id=request.user.id).exists()
 
-    except Post.DoesNotExist:
-        return render(request, 'app/404.html', status=404)
-    except Exception:
-        return render(request, 'app/500.html', status=500)
+            comments = post.comments.filter(parent=None)
+            comment_form = CommentForm()
 
-    return render(request, 'app/post_details.html', {'post': post, 'is_bookmarked': is_bookmarked , 'root_comments': comments, 'comment_form': comment_form, **common_props})
+        except Post.DoesNotExist:
+            return render(request, 'app/404.html', status=404)
+        except Exception:
+            return render(request, 'app/500.html', status=500)
 
-def comment(request):
-    try:
-        if request.POST:
+        return render(request, 'app/post_details.html', {'post': post, 'is_bookmarked': is_bookmarked , 'root_comments': comments, 'comment_form': comment_form, **common_props})
+
+class CommentView(View):
+    def post(self, request):
+        try:
             form = CommentForm(request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
@@ -86,63 +89,73 @@ def comment(request):
 
                 return HttpResponseRedirect(reverse('post_details', args=[post.slug]))
 
-    except (Post.DoesNotExist, Comment.DoesNotExist):
-        return render(request, 'app/404.html', status=404)
-    except Exception:
-        return render(request, 'app/500.html', status=500)
-    
-def subscribe(request):
-    try:
-        if request.POST:
+        except (Post.DoesNotExist, Comment.DoesNotExist):
+            return render(request, 'app/404.html', status=404)
+        except Exception:
+            return render(request, 'app/500.html', status=500)
+
+class SubscriptionView(View):
+    def post(self, request):
+        try:
             form = SubscriptionForm(request.POST)
             if form.is_valid():
                 form.save()
                 request.session['subscribed'] = True
                 return render(request, 'app/subscription_successful.html')
 
-    except Exception:
-        return render(request, 'app/500.html', status=500)
-    
+        except Exception:
+            return render(request, 'app/500.html', status=500)
 
-def search(request):
-    try:
-        if request.POST:
+class SearchView(View):
+    def post(self, request):
+        try:
             form = SearchForm(request.POST)
             if form.is_valid():
                 return HttpResponseRedirect(reverse('filtered_posts_list') + '?q=' + form.cleaned_data.get('query'))
 
-    except Exception:
-        return render(request, 'app/500.html', status=500) 
-    
+        except Exception:
+            return render(request, 'app/500.html', status=500) 
 
-def about(request):
-    try:
-        about = About.objects.all()[0:1][0]
-        return render(request, 'app/about.html', {'about': about, **common_props})
+class AboutView(View):
+    def get(self, request):
+        try:
+            about = About.objects.all()[0:1][0]
+            return render(request, 'app/about.html', {'about': about, **common_props})
 
-    except Exception:
-        return render(request, 'app/500.html', status=500) 
-    
+        except Exception:
+            return render(request, 'app/500.html', status=500) 
 
-def contact(request):
-    try:
-        if request.POST:
+class ContactView(View):
+    def get(self, request):
+        try:
+            contact_info = ContactInformation.objects.all()[0:1][0]
+            contact_message_form = ContactMessageForm()
+            return render(request, 'app/contact.html', {'contact_info': contact_info, 'contact_message_form': contact_message_form,  **common_props})
+
+        except Exception:
+            return render(request, 'app/500.html', status=500)
+        
+    def post(self, request):
+        try:
             contact_message_form = ContactMessageForm(request.POST)
             if contact_message_form.is_valid():
                 contact_message_form.save()
                 return render(request, 'app/contact_message_successful.html')
-            
-        contact_info = ContactInformation.objects.all()[0:1][0]
-        contact_message_form = ContactMessageForm()
-        return render(request, 'app/contact.html', {'contact_info': contact_info, 'contact_message_form': contact_message_form,  **common_props})
 
-    except Exception:
-        return render(request, 'app/500.html', status=500) 
-    
+        except Exception:
+            return render(request, 'app/500.html', status=500)
 
-def register(request):
-    try:
-        if request.POST:
+class RegistrationView(View):
+    def get(self, request):
+        try:
+            register_form = RegisterForm()
+            return render(request, 'registration/registration.html', {'register_form': register_form})
+
+        except Exception:
+            return render(request, 'app/500.html', status=500) 
+
+    def post(self, request):
+        try:
             register_form = RegisterForm(request.POST, request.FILES)
             if register_form.is_valid():
                 # create user
@@ -153,7 +166,7 @@ def register(request):
 
                 # create author
                 image_file = register_form.cleaned_data.get('image')
-                handle_uploaded_image(image_file)
+                self._handle_uploaded_image(image_file)
                 author = Author(
                     user=user,
                     image=f"images/{image_file.name}"
@@ -165,37 +178,33 @@ def register(request):
                     return HttpResponseRedirect(reverse('posts_list'))
             else:
                 return render(request, 'registration/registration.html', {'register_form': register_form})
-            
-        register_form = RegisterForm()
-        return render(request, 'registration/registration.html', {'register_form': register_form})
-    
-    except Exception:
-        return render(request, 'app/500.html', status=500) 
 
+        except Exception:
+            return render(request, 'app/500.html', status=500)
+        
+    def _handle_uploaded_image(self, file):
+        # save file in storage using the MEDIA_ROOT
+        with open(f"{settings.MEDIA_ROOT}/images/{file.name}", 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
 
-def handle_uploaded_image(file):
-    # save file in storage using the MEDIA_ROOT
-    with open(f"{settings.MEDIA_ROOT}/images/{file.name}", 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
+class BookmarkView(View):
+    def get(self, request, post_slug):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('login') + f"?next={reverse('post_details', args=[post_slug])}")
 
+        try:
+            post = Post.objects.get(slug=post_slug)
 
-def bookmark(request, post_slug):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('login') + f"?next={reverse('post_details', args=[post_slug])}")
+            if not post.bookmarkers.filter(id=request.user.id).exists():
+                post.bookmarkers.add(request.user)
+            else:
+                post.bookmarkers.remove(request.user)
 
-    try:
-        post = Post.objects.get(slug=post_slug)
-
-        if not post.bookmarkers.filter(id=request.user.id).exists():
-            post.bookmarkers.add(request.user)
-        else:
-            post.bookmarkers.remove(request.user)
-
-        return HttpResponseRedirect(reverse('post_details', args=[post_slug]))
-    
-    except Post.DoesNotExist:
-        return render(request, 'app/404.html', status=404)
-    
-    except Exception:
-        return render(request, 'app/500.html', status=500) 
+            return HttpResponseRedirect(reverse('post_details', args=[post_slug]))
+        
+        except Post.DoesNotExist:
+            return render(request, 'app/404.html', status=404)
+        
+        except Exception:
+            return render(request, 'app/500.html', status=500)
