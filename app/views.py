@@ -27,22 +27,50 @@ class PostsView(View):
                 tag_slug = request.GET.get('tag')
                 tag = Tag.objects.get(slug=tag_slug)
                 posts = tag.posts.all()[0:MAX_POSTS]
-                return render(request, 'app/tag_posts_list.html', {'tag': tag, 'posts': posts, **common_props})
+
+                context = {
+                    'tag': tag,
+                    'posts': posts,
+                    **common_props
+                }
+
+                return render(request, 'app/tag_posts_list.html', context)
             elif request.GET.get('author'):
                 author_slug = request.GET.get('author')
                 author = Author.objects.get(slug=author_slug)
                 posts = author.posts.all()[0:MAX_POSTS]
-                return render(request, 'app/author_posts_list.html', {'author': author, 'posts': posts, **common_props})
+
+                context = {
+                    'author': author,
+                    'posts': posts,
+                    **common_props
+                }
+
+                return render(request, 'app/author_posts_list.html', context)
             elif request.GET.get('q'):
                 q_text = request.GET.get('q')
                 posts = Post.objects.filter(
                     Q(title__icontains=q_text) | Q(body__icontains=q_text)
                 )[0:MAX_POSTS]
-                return render(request, 'app/search_results_posts_list.html', {'q_text': q_text, 'posts': posts, **common_props})
+
+                context = {
+                    'q_text': q_text,
+                    'posts': posts,
+                    **common_props
+                }
+
+                return render(request, 'app/search_results_posts_list.html', context)
             else:
                 popular_posts = Post.objects.all().order_by('-views_count')[0:MAX_POSTS]
                 latest_posts = Post.objects.all()[0:MAX_POSTS]
-                return render(request, 'app/posts_list.html', {'popular_posts': popular_posts, 'latest_posts': latest_posts, **common_props})
+
+                context = {
+                    'popular_posts': popular_posts,
+                    'latest_posts': latest_posts,
+                    **common_props
+                }
+
+                return render(request, 'app/posts_list.html', context)
 
         except (Tag.DoesNotExist, Author.DoesNotExist):
             return render(request, 'app/404.html', status=404)
@@ -57,7 +85,12 @@ class PostView(View):
             post.views_count += 1
             post.save()
 
-            is_bookmarked = request.user.is_authenticated and post.bookmarkers.filter(id=request.user.id).exists()
+            is_bookmarked = False
+            is_liked_by_user = False
+
+            if request.user.is_authenticated:
+                is_bookmarked = post.bookmarkers.filter(id=request.user.id).exists()
+                is_liked_by_user = post.likers.filter(id=request.user.id).exists()
 
             comments = post.comments.filter(parent=None)
             comment_form = CommentForm()
@@ -66,8 +99,17 @@ class PostView(View):
             return render(request, 'app/404.html', status=404)
         except Exception:
             return render(request, 'app/500.html', status=500)
+        
+        context = {
+            'post': post,
+            'is_bookmarked': is_bookmarked,
+            'is_liked_by_user': is_liked_by_user,
+            'root_comments': comments,
+            'comment_form': comment_form,
+            **common_props
+        }
 
-        return render(request, 'app/post_details.html', {'post': post, 'is_bookmarked': is_bookmarked , 'root_comments': comments, 'comment_form': comment_form, **common_props})
+        return render(request, 'app/post_details.html', context)
 
 class CommentView(View):
     def post(self, request):
@@ -120,7 +162,13 @@ class AboutView(View):
     def get(self, request):
         try:
             about = About.objects.all()[0:1][0]
-            return render(request, 'app/about.html', {'about': about, **common_props})
+
+            context = {
+                'about': about,
+                **common_props
+            }
+
+            return render(request, 'app/about.html', context)
 
         except Exception:
             return render(request, 'app/500.html', status=500) 
@@ -130,7 +178,14 @@ class ContactView(View):
         try:
             contact_info = ContactInformation.objects.all()[0:1][0]
             contact_message_form = ContactMessageForm()
-            return render(request, 'app/contact.html', {'contact_info': contact_info, 'contact_message_form': contact_message_form,  **common_props})
+
+            context = {
+                'contact_info': contact_info,
+                'contact_message_form': contact_message_form,
+                **common_props
+            }
+
+            return render(request, 'app/contact.html', context)
 
         except Exception:
             return render(request, 'app/500.html', status=500)
@@ -149,7 +204,13 @@ class RegistrationView(View):
     def get(self, request):
         try:
             register_form = RegisterForm()
-            return render(request, 'registration/registration.html', {'register_form': register_form})
+
+            context = {
+                'register_form': register_form,
+                **common_props
+            }
+
+            return render(request, 'registration/registration.html', context)
 
         except Exception:
             return render(request, 'app/500.html', status=500) 
@@ -177,7 +238,11 @@ class RegistrationView(View):
                     login(request, user)
                     return HttpResponseRedirect(reverse('posts_list'))
             else:
-                return render(request, 'registration/registration.html', {'register_form': register_form})
+                context = {
+                    'register_form': register_form
+                }
+                
+                return render(request, 'registration/registration.html', context)
 
         except Exception:
             return render(request, 'app/500.html', status=500)
@@ -200,6 +265,32 @@ class BookmarkView(View):
                 post.bookmarkers.add(request.user)
             else:
                 post.bookmarkers.remove(request.user)
+
+            return HttpResponseRedirect(reverse('post_details', args=[post_slug]))
+        
+        except Post.DoesNotExist:
+            return render(request, 'app/404.html', status=404)
+        
+        except Exception:
+            return render(request, 'app/500.html', status=500)
+        
+
+class LikeView(View):
+    def get(self, request, post_slug):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('login') + f"?next={reverse('post_details', args=[post_slug])}")
+        
+        try:
+            post = Post.objects.get(slug=post_slug)
+
+            if not post.likers.filter(id=request.user.id).exists():
+                post.likers.add(request.user)
+                post.likes_count += 1
+            else:
+                post.likers.remove(request.user)
+                post.likes_count -= 1
+            
+            post.save()
 
             return HttpResponseRedirect(reverse('post_details', args=[post_slug]))
         

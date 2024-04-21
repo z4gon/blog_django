@@ -2,11 +2,21 @@
 
 <!-- ======= Comments ======= -->
 <div class="comments">
-	{% if root_comments %}
-	<h5 class="comment-title py-4">
-		{{ root_comments.count }} Comment{{ root_comments.count | pluralize:'s' }}
-	</h5>
-	{% endif %} 
+	<div class="post-stats">
+		<h5 class="comment-title py-4">
+			<a href="{% url "like" post.slug %}" class="like">
+				{% if is_liked_by_user %}
+						<i class="bi bi-heart-fill"></i>
+				{% else %}
+					<i class="bi bi-heart"></i>
+				{% endif %}
+			</a>
+			{{ post.likes_count }} Like{{ post.likes_count | pluralize:'s' }}
+		</h5>
+		<h5 class="comment-title py-4">
+			{{ root_comments.count }} Comment{{ root_comments.count | pluralize:'s' }}
+		</h5>
+	</div>
 	
 	{% for comment in root_comments %}
 

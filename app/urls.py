@@ -1,4 +1,4 @@
-from app.views import PostsView, PostView, CommentView, SubscriptionView, SearchView, AboutView, ContactView, RegistrationView, BookmarkView
+from app.views import PostsView, PostView, CommentView, SubscriptionView, SearchView, AboutView, ContactView, RegistrationView, BookmarkView, LikeView
 from django.urls import path, include
 
 urlpatterns = [
@@ -13,4 +13,5 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/register', RegistrationView.as_view(), name='register'),
     path('bookmark/<slug:post_slug>', BookmarkView.as_view(), name='bookmark'),
+    path('like/<slug:post_slug>', LikeView.as_view(), name='like'),
 ]

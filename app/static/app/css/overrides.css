@@ -12,6 +12,16 @@
 	font-size: 2em;
 }
 
+.post-stats {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.post-stats > * {
+	margin-right: 1em;
+}
+
 .post-entry-1 {
 	margin-bottom: 30px;
 	display: inline-block;
