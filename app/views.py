@@ -241,7 +241,7 @@ class RegistrationView(View):
                 context = {
                     'register_form': register_form
                 }
-                
+
                 return render(request, 'registration/registration.html', context)
 
         except Exception:
@@ -273,7 +273,24 @@ class BookmarkView(View):
         
         except Exception:
             return render(request, 'app/500.html', status=500)
-        
+
+class BookmarksView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('login'))
+
+        try:
+            posts = request.user.bookmarks.all()[0:MAX_POSTS]
+
+            context = {
+                'posts': posts,
+                **common_props
+            }
+
+            return render(request, 'app/bookmarked_posts_list.html', context)
+
+        except Exception:
+            return render(request, 'app/500.html', status=500) 
 
 class LikeView(View):
     def get(self, request, post_slug):
